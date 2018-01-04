@@ -2,6 +2,10 @@
 # Author: 小狼狗
 import requests
 import re
+'''
+    利用cookie模拟登陆知乎
+'''
+
 
 # # #设置头信息
 # headers_base = {
@@ -66,7 +70,10 @@ import re
 # url = "https://www.zhihu.com"
 # #进行登录，将星号替换成你的知乎登录邮箱和密码即可
 # login(url,"1549189937@qq.com","1234qwer")
-
+#-------------------------------------------------------------------------------------------
+'''
+    利用request创建session会话，并将cookie保存到本地，进行提交登陆。
+'''
 import time
 from http import cookiejar
 import requests
@@ -126,6 +133,7 @@ def login(email, password):
         }
     print(session.cookies)
     response = session.post(login_url, data=data, headers=headers)
+    session.cookies.save()
     login_code = response.json()
     print(login_code['msg'])
     print(session.cookies)

@@ -49,30 +49,6 @@ from bs4 import BeautifulSoup
 # print c
 # print len(c)
 
-#即诶下xml文件
-from lxml import etree
-import requests
-X = etree.parse('./books.xml')
-# print(type(X))
-# # selector = etree.XML(X)
-# h =  X.xpath('/bookstore/book/price/text()')    #返回list
-#
-# l = X.xpath('/bookstore/book[price>29][1]/title/text()')
-# for x in l:
-#     print(x)
-#
-url = "https://python123.io/ws/demo.html"
-#r = requests.get(url)
-
-r = requests.get(url)
-#BeautifulSoup解析
-#soup = BeautifulSoup(r.text,'lxml')
-#print(soup)
-
-#lxml解析
-selector = etree.HTML(r.text)
-l = selector.xpath('//p/text()')
-print(l)
 
 
 
