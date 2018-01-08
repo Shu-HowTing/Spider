@@ -73,6 +73,12 @@ import re
 #-------------------------------------------------------------------------------------------
 '''
     利用request创建session会话，并将cookie保存到本地，进行提交登陆。
+        1. 抓包工具获取登陆需要POST数据：email/password/_xsrf/captcha
+        2. 获取_xsrf
+        3. 获取captcha(验证码)，保存到本地，手动输入
+        4. session.post()进行登陆
+        5. 将cookie信息保存到本地
+注意：知乎改版，本方法已经不适用，不再是获得_xsrf验证，而是通过signature验证
 '''
 import time
 from http import cookiejar
@@ -100,9 +106,12 @@ except:
 
 
 def get_xsrf():
+    '''
+    获得网站的xsrf：作用是防止CSRF(跨站请求伪造)，又叫跨域攻击。
+    :return:
+    '''
     response = session.get("https://www.zhihu.com", headers=headers, verify=False)
     soup = BeautifulSoup(response.content, "html.parser")
-
     xsrf = soup.find('input', attrs={"name": "_xsrf"}).get("value")
     return xsrf
 
@@ -122,30 +131,36 @@ def get_captcha():
     return captcha
 
 
-def login(email, password):
+def log_in(email, password):
     login_url = 'https://www.zhihu.com/login/email'
+    #登陆需要提交的数据
     data = {
-        'email': email,
-        'password': password,
-        '_xsrf': get_xsrf(),
-        "captcha": get_captcha(),
-        'remember_me': 'true'
-        }
-    print(session.cookies)
+            'email': email,
+            'password': password,
+            '_xsrf': get_xsrf(),
+            "captcha": get_captcha(),
+            'remember_me': 'true'
+          }
+
     response = session.post(login_url, data=data, headers=headers)
+
+    #保存cookie
     session.cookies.save()
+
+    #显示登陆成功反馈信息
     login_code = response.json()
-    print(login_code['msg'])
-    print(session.cookies)
+    print(login_code['msg'])  #登录成功
+    #print(session.cookies)
+
+    #从登录成功的网站进一步点击其他网站进行验证
     r = session.get("https://www.zhihu.com/settings/profile", headers=headers)
-    print(r.status_code)
-    print(r.text)
-    with open("xx.html", "wb") as f:
+    #保存个人的设置页面
+    with open("my.html", "wb") as f:
         f.write(r.content)
 
 
 if __name__ == '__main__':
     email = "1549189937@qq.com"
-    password = "1234qwer"
-    login(email, password)
+    password = "dsh1549189937"
+    log_in(email, password)
     #json_str = ""
