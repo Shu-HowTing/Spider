@@ -8,6 +8,8 @@ import random
 import urllib
 import requests
 import json
+import hashlib
+import time
 
 
 # # 向指定的url发送请求，并返回服务器响应的类文件对象
@@ -60,17 +62,38 @@ import json
 #POST请求方法
 url = "http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule&smartresult=ugc"
 key = input("请输入你要查询的单词：")
-form_data = {
-            "type": "AUTO",
-            "i": key,
-            "doctype": "json",
-            "xmlVersion": "1.8",
-            "keyfrom": "fanyi.web",
-            "ue": "UTF-8",
-            "action": "FY_BY_CLICKBUTTON",
-            "typoResult": "true"
-            }
 
+
+def createData(transStr):
+    '''
+    待翻译的内容
+    :param transStr:
+    :return: dict
+    '''
+    salt = str(int(time.time()*1000))
+    client = 'fanyideskweb'
+    a = "rY0D^0'nM0}g5Mm1z%1G4"
+    md5 = hashlib.md5()
+    digStr = (client+transStr+salt+a).encode('utf-8')
+    md5.update(digStr)
+    sign = md5.hexdigest()
+
+    data = {
+        'i': transStr ,
+        'from': 'AUTO',
+        'to': 'AUTO',
+        'smartresult': 'dict',
+        'client': 'fanyideskweb',
+        'salt': salt,
+        'sign': sign,
+        'doctype': 'json',
+        'version': '2.1',
+        'keyfrom': 'fanyi.web',
+        'action': 'FY_BY_CL1CKBUTTON',
+        'typoResult': 'true'
+    }
+    return data
+form_data = createData(key)
 header = {
     "Accept":"application/json, text/javascript, */*; q=0.01",
     "Content-Type":"application/x-www-form-urlencoded; charset=UTF-8",
@@ -79,7 +102,7 @@ header = {
     }
 data = urllib.parse.urlencode(form_data).encode(encoding='utf-8') #POST的数据必须是byte
 request = ur.Request(url, data=data, headers=header)
-response = ur.urlopen(request).read().decode('utf-8')  #解码成str
+response = ur.urlopen(request).read().decode('utf-8')  #返回的是bytes，需要解码成str  decode('utf-8')
 content = json.loads(response)
 print(content["translateResult"][0][0]['tgt'])  # 被封了^-^
 #
@@ -139,7 +162,7 @@ response = opener.open(request)
 
 print(response.read().decode('utf-8'))
 
-#私密代理
+####私密代理的使用
 username = "***"
 passwd = "***"
 
@@ -155,4 +178,8 @@ response = opener.open(request)
 
 print(response.read().decode('utf-8'))
 
+#####requests库使用代理
+proxies = { "http": "http://119.29.18.239:8888"}
+r = requests.get(url=url, proxies=proxies)
+print(r.text)
 

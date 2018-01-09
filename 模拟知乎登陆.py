@@ -112,6 +112,7 @@ def get_xsrf():
     '''
     response = session.get("https://www.zhihu.com", headers=headers, verify=False)
     soup = BeautifulSoup(response.content, "html.parser")
+    #知乎改版，找不到xsrf
     xsrf = soup.find('input', attrs={"name": "_xsrf"}).get("value")
     return xsrf
 

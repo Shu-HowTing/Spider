@@ -49,19 +49,21 @@ from bs4 import BeautifulSoup
 # print c
 # print len(c)
 
-class A():
-    def __init__(self, a):
-        self.a = a
-    def h(self,):
-        return self.a + j
-#global j
-j = 2
-b = A(5)
-print(b.a)
-print(b.h())
+# class A():
+#     def __init__(self, a):
+#         self.a = a
+#     def h(self,):
+#         return self.a + j
+# #global j
+# j = 2
+# b = A(5)
+# print(b.a)
+# print(b.h())
 
 
-
+a = '1'
+b = '2'
+print(a,b)
 
 
 

@@ -64,7 +64,7 @@ class ZHGP:
         try:
             # 首先加载出全部的内容，判断是否页面中存在“更多”这一个按钮
             while True:
-                # 这里需要注意的是：selenium2 是不支持 类名之中 有空格的
+                # 这里需要注意的是：selenium2 是不支持类名之中有空格的
                 try:
                     self.scroll(driver)
                     time.sleep(60)
