@@ -64,7 +64,11 @@ from bs4 import BeautifulSoup
 a = '1'
 b = '2'
 print(a,b)
-
+l = []
+def fun(x):
+    x.append(2)
+fun(l)
+print(l)
 
 
 

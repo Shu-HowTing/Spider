@@ -1,4 +1,6 @@
-
+'''
+    爬取妹子图首页模特的图片
+'''
 import os
 import requests
 import random
@@ -29,7 +31,7 @@ user_agent_list = [
             "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3", \
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24", \
             "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24"
-        ]  
+        ]
 header = {
             "Referer":'http://meizitu.com',
             "User-Agent": random.choice(user_agent_list)
@@ -51,7 +53,7 @@ for cur_page in range(1, int(preview_page_cnt) + 1):
         link = tag['href']
         soup = BeautifulSoup(requests.get(link, headers=header).text, parser) #解析首页的页面
         # 获取每一个妹子图片数量  第4个a标签中存储着尾页信息
-        pic_cnt = soup.find('div', class_='pagenavi').find_all('a')[4].get_text() #因为class是关键字所以加'_'
+        pic_cnt = soup.find('div', {'class':'pagenavi'}).find_all('a')[4].get_text()
         # 为每一个妹子创建一个目录
         pic_path = cur_path + dir_name
         if os.path.exists(pic_path):
