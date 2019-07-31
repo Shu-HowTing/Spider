@@ -57,6 +57,6 @@ if __name__=='__main__':
     key       = input("请输入你要查询的单词：")
     form_data = createData(key)
     result    = translation(form_data)
-    print(result)
+    print("翻译：%s"%result)
 
 
